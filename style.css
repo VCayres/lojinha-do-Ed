@@ -196,13 +196,7 @@ header.header p {
 }
 
 /* Modal de nota fiscal */
-.receipt-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+@@ -206,106 +206,135 @@ header.header p {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -226,6 +220,15 @@ header.header p {
 .receipt h2 {
   margin-top: 0;
   text-align: center;
+}
+
+.receipt-header {
+  margin-bottom: 1rem;
+}
+
+.receipt-header p {
+  margin: 0.1rem 0;
+  font-size: 0.85rem;
 }
 
 .receipt-table {
@@ -257,6 +260,10 @@ header.header p {
   margin-top: 1rem;
   font-size: 0.95rem;
 }
+  .receipt-summary {
+    margin-top: 1rem;
+    font-size: 0.95rem;
+  }
 .receipt-summary p {
   margin: 0.2rem 0;
   display: flex;
@@ -298,14 +305,41 @@ header.header p {
 .close-btn:hover {
   background-color: #ccc;
 }
+  .close-btn:hover {
+    background-color: #ccc;
+  }
 
 @media (max-width: 768px) {
   .container {
     flex-direction: column;
   }
+  .product-grid {
+    padding-bottom: 260px;
+  }
   .cart-section {
     position: static;
     max-width: 100%;
     margin-top: 1rem;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-width: none;
+    margin-top: 0;
+    border-radius: 8px 8px 0 0;
+    box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+    max-height: 40vh;
+    overflow-y: auto;
+    z-index: 1000;
   }
+}
+  .cart-items {
+    max-height: 25vh;
+  }
+}
+
+/* QR code na nota fiscal */
+.qr-code {
+  display: block;
+  margin: 1rem auto;
 }

@@ -256,13 +256,13 @@ header.header p {
 }
 
 /* Sumário da nota fiscal (totais) */
+s5tjf3-codex/improve-responsive-design-for-mobile
+=======
 .receipt-summary {
   margin-top: 1rem;
   font-size: 0.95rem;
 }
-  .receipt-summary {
-    margin-top: 1rem;
-    font-size: 0.95rem;
+
   }
 .receipt-summary p {
   margin: 0.2rem 0;
@@ -302,41 +302,40 @@ header.header p {
   color: #333;
 }
 
+s5tjf3-codex/improve-responsive-design-for-mobile
+=======
 .close-btn:hover {
   background-color: #ccc;
 }
-  .close-btn:hover {
-    background-color: #ccc;
-  }
 
 @media (max-width: 768px) {
   .container {
     flex-direction: column;
   }
   .product-grid {
+ s5tjf3-codex/improve-responsive-design-for-mobile
+    padding-bottom: calc(40vh + 2rem);
+  }
+  .cart-section {
+=======
     padding-bottom: 260px;
   }
   .cart-section {
     position: static;
     max-width: 100%;
     margin-top: 1rem;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    max-width: none;
-    margin-top: 0;
-    border-radius: 8px 8px 0 0;
-    box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
-    max-height: 40vh;
-    overflow-y: auto;
-    z-index: 1000;
+
+s5tjf3-codex/improve-responsive-design-for-mobile
+  }
+  .cart-items {
+    max-height: 25vh;
+  }
+=======
   }
 }
   .cart-items {
     max-height: 25vh;
   }
-}
 
 /* QR code na nota fiscal */
 .qr-code {

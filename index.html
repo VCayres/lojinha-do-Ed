@@ -32,6 +32,11 @@
   <div id="receipt-modal" class="receipt-modal hidden">
     <div class="receipt">
       <h2>Nota Fiscal</h2>
+      <div class="receipt-header">
+        <p>CNPJ: 00.000.000/0001-00</p>
+        <p>Endereço: Rua Exemplo, 123 - São Paulo/SP</p>
+        <p>Cliente: Consumidor Final</p>
+      </div>
       <p><strong>Data:</strong> <span id="receipt-date"></span></p>
       <table id="receipt-table" class="receipt-table">
         <thead>
@@ -49,7 +54,12 @@
         <p><strong>Total de Impostos:</strong> <span id="receipt-taxes"></span></p>
         <p class="receipt-total"><strong>Total da compra:</strong> <span id="receipt-total"></span></p>
       </div>
-      <p class="disclaimer">Documento emitido por simulador educacional. Não possui validade fiscal.</p>
+        <img
+          id="qr-code"
+          class="qr-code"
+          alt="QR Code da Educação Fiscal do Paraná"
+        >
+      <p class="disclaimer">Este documento não tem valor fiscal e foi gerado com um simulador educacional.</p>
       <button id="print-btn" class="print-btn">Imprimir</button>
       <button id="close-receipt-btn" class="close-btn">Fechar</button>
     </div>

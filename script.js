@@ -218,6 +218,7 @@ function printReceipt() {
     th { background-color: #f0f8ff; }
     tfoot td { font-weight: bold; }
     .disclaimer { margin-top: 1rem; font-size: 0.8rem; font-style: italic; color: #555; text-align: center; }
+    .qr-code { display:block; margin:1rem auto; }
   `;
   let html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Nota Fiscal</title><style>${styles}</style></head><body>`;
   // Cabeçalho da nota
@@ -247,15 +248,17 @@ function printReceipt() {
   html += '</tbody>';
   html += `<tfoot><tr><td colspan="4">Total de impostos</td><td>${formatCurrency(totalTaxes)}</td></tr>`;
   html += `<tr><td colspan="4">Total da compra</td><td>${formatCurrency(totalPurchase)}</td></tr></tfoot></table>`;
-  html += '<p class="disclaimer">Documento emitido por simulador educacional. Não possui validade fiscal.</p>';
+  const qrLink = encodeURIComponent('https://www.educacaofiscal.pr.gov.br/');
+  html += `<img class="qr-code" src="https://chart.googleapis.com/chart?chs=120x120&cht=qr&chl=${qrLink}" alt="QR Code da Educação Fiscal do Paraná">`;
+  html += '<p class="disclaimer">Este documento não tem valor fiscal e foi gerado com um simulador educacional.</p>';
   html += '</body></html>';
   printWindow.document.write(html);
   printWindow.document.close();
-  printWindow.focus();
-  setTimeout(() => {
+  printWindow.onload = () => {
+    printWindow.focus();
     printWindow.print();
     printWindow.close();
-  }, 250);
+  };
 }
 
 // Esconde o modal da nota fiscal e limpa o carrinho.

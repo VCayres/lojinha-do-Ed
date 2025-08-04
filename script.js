@@ -45,6 +45,11 @@ const receiptDateEl   = document.getElementById('receipt-date');
 const receiptTotalEl  = document.getElementById('receipt-total');
 const printBtnEl      = document.getElementById('print-btn');
 const closeReceiptBtnEl = document.getElementById('close-receipt-btn');
+const qrCodeEl        = document.getElementById('qr-code');
+
+// Link base utilizado no QR Code da nota fiscal
+const qrLink = 'https://www.educacaofiscal.pr.gov.br/';
+qrCodeEl.src = `https://chart.googleapis.com/chart?chs=120x120&cht=qr&chl=${encodeURIComponent(qrLink)}`;
 
 // Formata números como moeda brasileira (R$).
 const formatCurrency = (value) => {
@@ -248,14 +253,11 @@ function printReceipt() {
   html += '</tbody>';
   html += `<tfoot><tr><td colspan="4">Total de impostos</td><td>${formatCurrency(totalTaxes)}</td></tr>`;
   html += `<tr><td colspan="4">Total da compra</td><td>${formatCurrency(totalPurchase)}</td></tr></tfoot></table>`;
- s5tjf3-codex/improve-responsive-design-for-mobile
-  const qrLink = encodeURIComponent('https://www.educacaofiscal.pr.gov.br/');
-  html += `<img class="qr-code" src="https://chart.googleapis.com/chart?chs=120x120&cht=qr&chl=${qrLink}" alt="QR Code da Educação Fiscal do Paraná">`;
-=======
-  html += '<p class="disclaimer">Documento emitido por simulador educacional. Não possui validade fiscal.</p>';
-  html += '<img class="qr-code" '
-       + 'src="https://chart.googleapis.com/chart?chs=120x120&cht=qr&chl=https://www.educacaofiscal.pr.gov.br/" '
-       + 'alt="QR Code da Educação Fiscal do Paraná">';
+d68al9-codex/improve-responsive-design-for-mobile
+  const encodedLink = encodeURIComponent(qrLink);
+  html += `<img class="qr-code" src="https://chart.googleapis.com/chart?chs=120x120&cht=qr&chl=${encodedLink}" alt="QR Code da Educação Fiscal do Paraná">`;
+  html += '<p class="disclaimer">Este documento não tem valor fiscal e foi gerado com um simulador educacional.</p>';
+  html += '</body></html>';
 
   printWindow.document.write(html);
   printWindow.document.close();
@@ -284,9 +286,4 @@ loadProducts();
 s5tjf3-codex/improve-responsive-design-for-mobile
 // Atualiza carrinho inicialmente (vazio)
 updateCartUI();
-=======
-style.css
-+40
--11
-
-
+d68al9-codex/improve-responsive-design-for-mobile

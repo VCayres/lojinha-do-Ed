@@ -196,13 +196,7 @@ header.header p {
 }
 
 /* Modal de nota fiscal */
-.receipt-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+@@ -206,106 +206,135 @@ header.header p {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -262,9 +256,11 @@ header.header p {
 }
 
 /* Sumário da nota fiscal (totais) */
+d68al9-codex/improve-responsive-design-for-mobile
   .receipt-summary {
     margin-top: 1rem;
     font-size: 0.95rem;
+
   }
 .receipt-summary p {
   margin: 0.2rem 0;
@@ -304,15 +300,18 @@ header.header p {
   color: #333;
 }
 
+d68al9-codex/improve-responsive-design-for-mobile
   .close-btn:hover {
     background-color: #ccc;
   }
+
 
 @media (max-width: 768px) {
   .container {
     flex-direction: column;
   }
   .product-grid {
+d68al9-codex/improve-responsive-design-for-mobile
     padding-bottom: calc(40vh + 2rem);
   }
   .cart-section {
@@ -332,6 +331,7 @@ header.header p {
     max-height: 25vh;
   }
 }
+
 
 /* QR code na nota fiscal */
 .qr-code {

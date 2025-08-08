@@ -1,25 +1,29 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#00b4d8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="theme-color" content="#00b4d8"/>
   <title>Vendinha do Fisco</title>
-  <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="style.css">
+
+  <!-- PWA -->
+  <link rel="manifest" href="./manifest.json"/>
+
+  <link rel="stylesheet" href="./style.css"/>
 </head>
 <body>
   <header class="header">
     <h1>Vendinha do Fisco</h1>
-    <p>Escolha seus produtos e gere a sua nota fiscal!</p>
+    <p>Simulador educacional com emissão de nota fiscal (sem validade fiscal).</p>
   </header>
-  <main class="container">
-    <!-- Grade de produtos -->
-    <section id="product-grid" class="product-grid"></section>
-    <!-- Seção de carrinho -->
-    <aside id="cart-section" class="cart-section">
+
+  <main class="app">
+    <section class="products" id="products"></section>
+
+    <!-- Carrinho lateral (desktop) -->
+    <aside class="cart-section" id="cart-desktop">
       <h2>Carrinho</h2>
-      <ul id="cart-items" class="cart-items"></ul>
+      <ul class="cart-items" id="cart-items"></ul>
       <div class="cart-total">
         <span>Total:</span>
         <span id="cart-total">R$ 0,00</span>
@@ -28,54 +32,88 @@
     </aside>
   </main>
 
-  <!-- Modelo oculto da nota fiscal para impressão -->
-  <div id="receipt-modal" class="receipt-modal hidden">
-    <div class="receipt">
-      <h2>Nota Fiscal</h2>
-      <div class="receipt-header">
-        <p>CNPJ: 00.000.000/0001-00</p>
-        <p>Endereço: Rua Exemplo, 123 - São Paulo/SP</p>
-        <p>Cliente: Consumidor Final</p>
+  <!-- Barra fixa do carrinho (mobile) -->
+  <div class="mobile-cart-bar" id="mobile-cart-bar">
+    <button class="mobile-cart-open" id="mobile-cart-open" aria-label="Abrir carrinho">
+      🛒 <span id="mobile-cart-count">0</span>
+    </button>
+    <div class="mobile-cart-total">
+      Total: <strong id="mobile-cart-total">R$ 0,00</strong>
+    </div>
+    <button class="mobile-cart-checkout" id="mobile-checkout-btn" disabled>Nota</button>
+  </div>
+
+  <!-- Drawer/modal do carrinho (mobile) -->
+  <div class="drawer-backdrop" id="drawer-backdrop" hidden></div>
+  <aside class="drawer" id="drawer" aria-hidden="true">
+    <header class="drawer-header">
+      <h3>Carrinho</h3>
+      <button id="drawer-close" aria-label="Fechar">✕</button>
+    </header>
+    <ul class="cart-items" id="cart-items-mobile"></ul>
+    <div class="drawer-total">
+      <span>Total:</span>
+      <strong id="drawer-total">R$ 0,00</strong>
+    </div>
+    <button id="drawer-checkout" class="checkout-btn" disabled>Gerar Nota Fiscal</button>
+  </aside>
+
+  <!-- Nota Fiscal (modal) -->
+  <div class="receipt-backdrop" id="receipt-backdrop" hidden></div>
+  <div class="receipt-modal" id="receipt-modal" role="dialog" aria-modal="true" hidden>
+    <div class="receipt-paper">
+      <header class="nf-header">
+        <div>
+          <h2>NOTA FISCAL (SIMULADA)</h2>
+          <p><strong>Emitente:</strong> Vendinha do Fisco LTDA (FICTÍCIO)</p>
+          <p><strong>CNPJ:</strong> 00.000.000/0000-00 • <strong>IE:</strong> ISENTO</p>
+          <p><strong>Endereço:</strong> Rua da Educação, 123 — Curitiba/PR</p>
+        </div>
+        <img class="nf-qr" id="nf-qr" alt="QR Code - Educação Fiscal PR"/>
+      </header>
+
+      <div class="nf-meta">
+        <p><strong>Nº:</strong> <span id="nf-numero"></span> • <strong>Série:</strong> 1</p>
+        <p><strong>Data/Hora:</strong> <span id="nf-data"></span></p>
+        <p><strong>Destinatário:</strong> Consumidor Final</p>
       </div>
-      <p><strong>Data:</strong> <span id="receipt-date"></span></p>
-      <table id="receipt-table" class="receipt-table">
+
+      <table class="nf-table">
         <thead>
           <tr>
             <th>Produto</th>
-            <th>Quantidade</th>
-            <th>Vlr Unit.</th>
+            <th>Qtd</th>
+            <th>Vlr Unit</th>
             <th>Impostos</th>
             <th>Total</th>
           </tr>
         </thead>
-        <tbody></tbody>
+        <tbody id="nf-itens"></tbody>
       </table>
-      <div class="receipt-summary">
-        <p><strong>Total de Impostos:</strong> <span id="receipt-taxes"></span></p>
-        <p class="receipt-total"><strong>Total da compra:</strong> <span id="receipt-total"></span></p>
-      </div>
-d68al9-codex/improve-responsive-design-for-mobile
-        <img
-          id="qr-code"
-          class="qr-code"
-          alt="QR Code da Educação Fiscal do Paraná"
-        >
-      <p class="disclaimer">Este documento não tem valor fiscal e foi gerado com um simulador educacional.</p>
-      <button id="print-btn" class="print-btn">Imprimir</button>
-      <button id="close-receipt-btn" class="close-btn">Fechar</button>
 
+      <div class="nf-totais">
+        <p><span>Base de Cálculo:</span> <strong id="nf-base"></strong></p>
+        <p><span>Total de Impostos:</span> <strong id="nf-impostos"></strong></p>
+        <p><span>Total da Nota:</span> <strong id="nf-total"></strong></p>
+      </div>
+
+      <p class="nf-aviso">Documento emitido por simulador educacional. Não possui validade fiscal.</p>
+
+      <div class="nf-acoes">
+        <button id="nf-print" class="print-btn">Imprimir</button>
+        <button id="nf-close" class="close-btn">Fechar</button>
+      </div>
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <script src="./script.js"></script>
   <script>
-    // Registra o service worker para PWA
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('service-worker.js')
-          .catch((err) => console.error('Service worker registration failed', err));
+        navigator.serviceWorker.register('./service-worker.js').catch(()=>{});
       });
     }
   </script>
 </body>
 </html>
+

@@ -21,7 +21,7 @@ const productsSeed = [
   { id: 15, name: 'Ursinho de pelúcia',     price: 60.00, img: 'assets/15.png' },
   { id: 16, name: 'Arroz 5kg',     price: 20.00, img: 'assets/16.png' },
   { id: 17, name: 'Banana',     price: 5.00, img: 'assets/17.png' },
-  { id: 18, name: 'Carne',      price: 30.00, img: 'assets/18.pgn' },
+  { id: 18, name: 'Carne',      price: 30.00, img: 'assets/18.png' },
   { id: 19, name: 'Feijão 1Kg',     price: 8.00, img: 'assets/19.png' },
   { id: 20, name: 'Litro de leite',     price: 6.00, img: 'assets/20.png' },
   { id: 21, name: 'Pacote de balas',     price: 7.00, img: 'assets/21.png' },

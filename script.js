@@ -4,12 +4,12 @@ const QR_SRC = 'assets/qr-pr-educacao.png'; // imagem do QR
 
 // ====== STATE ======
 const productsSeed = [
-  { id: 1, name: 'Camiseta',  price: 40.00, img: 'assets/4.png'  },
-  { id: 2, name: 'Canetinhas',price: 20.00, img: 'assets/5.png'  },
-  { id: 3, name: 'Mochila',   price: 80.00, img: 'assets/9.png'  },
-  { id: 4, name: 'Arroz 5kg', price: 25.00, img: 'assets/16.png' },
-  { id: 5, name: 'Banana',    price: 5.00,  img: 'assets/17.png' },
-  { id: 6, name: 'Carne',     price: 30.00, img: 'assets/18.png' },
+  { id: 1, name: 'Bola',  price: 40.00, img: 'assets/1.png'  },
+  { id: 2, name: 'Boné',price: 20.00, img: 'assets/2.png'  },
+  { id: 3, name: 'Caderno',   price: 10.00, img: 'assets/3.png'  },
+  { id: 4, name: 'Camiseta', price: 80.00, img: 'assets/4.png' },
+  { id: 5, name: 'Canetinhas',    price: 10.00,  img: 'assets/05.png' },
+  { id: 6, name: 'Carrinho de controle Remoto',     price: 50.00, img: 'assets/06.png' },
 ];
 const cart = new Map(); // id -> { id, name, price, qty }
 

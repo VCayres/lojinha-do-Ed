@@ -1,289 +1,238 @@
-/* script.js
- * Este arquivo fornece a lógica de interação para a vendinha.
- */
+// ====== CONFIG ======
+const TAX_RATE = 0.20; // 20% educativo
+const QR_SRC = 'assets/qr-pr-educacao.png'; // imagem do QR
 
-// Lista de produtos. Cada produto tem id, nome, preço e caminho da imagem.
-const products = [
-  { id: 1,  name: 'Bola',                    price: 50.00, image: 'assets/1.png' },
-  { id: 2,  name: 'Boné',                    price: 30.00, image: 'assets/2.png' },
-  { id: 3,  name: 'Caderno',                 price: 15.00, image: 'assets/3.png' },
-  { id: 4,  name: 'Camiseta',                price: 40.00, image: 'assets/4.png' },
-  { id: 5,  name: 'Canetinhas',              price: 20.00, image: 'assets/5.png' },
-  { id: 6,  name: 'Carrinho de controle remoto', price: 120.00, image: 'assets/6.png' },
-  { id: 7,  name: 'Celular',                 price: 1500.00, image: 'assets/7.png' },
-  { id: 8,  name: 'Escova de dentes',        price: 5.00, image: 'assets/8.png' },
-  { id: 9,  name: 'Mochila',                 price: 80.00, image: 'assets/9.png' },
-  { id: 10, name: 'Pendrive',                price: 25.00, image: 'assets/10.png' },
-  { id: 11, name: 'Perfume',                 price: 90.00, image: 'assets/11.png' },
-  { id: 12, name: 'Presilhas e Pulseira',    price: 20.00, image: 'assets/12.png' },
-  { id: 13, name: 'Skate',                   price: 200.00, image: 'assets/13.png' },
-  { id: 14, name: 'Tênis',                   price: 150.00, image: 'assets/14.png' },
-  { id: 15, name: 'Ursinho de pelúcia',      price: 35.00, image: 'assets/15.png' },
-  { id: 16, name: 'Arroz 5kg',               price: 25.00, image: 'assets/16.png' },
-  { id: 17, name: 'Banana (cacho)',          price: 5.00, image: 'assets/17.png' },
-  { id: 18, name: 'Carne',                   price: 30.00, image: 'assets/18.png' },
-  { id: 19, name: 'Feijão 1kg',              price: 8.00, image: 'assets/19.png' },
-  { id: 20, name: '1 litro de leite',        price: 6.00, image: 'assets/20.png' },
-  { id: 21, name: 'Pacote de balas',         price: 3.00, image: 'assets/21.png' },
-  { id: 22, name: 'Pão 750g',                price: 7.00, image: 'assets/22.png' },
-  { id: 23, name: 'Sorvete',                 price: 10.00, image: 'assets/23.png' },
-  { id: 24, name: 'Caixa de suco 1L',        price: 4.00, image: 'assets/24.png' },
-  { id: 25, name: 'Tomate',                  price: 8.00, image: 'assets/25.png' }
+// ====== STATE ======
+const productsSeed = [
+  { id: 1, name: 'Camiseta',  price: 40.00, img: 'assets/4.png'  },
+  { id: 2, name: 'Canetinhas',price: 20.00, img: 'assets/5.png'  },
+  { id: 3, name: 'Mochila',   price: 80.00, img: 'assets/9.png'  },
+  { id: 4, name: 'Arroz 5kg', price: 25.00, img: 'assets/16.png' },
+  { id: 5, name: 'Banana',    price: 5.00,  img: 'assets/17.png' },
+  { id: 6, name: 'Carne',     price: 30.00, img: 'assets/18.png' },
 ];
+const cart = new Map(); // id -> { id, name, price, qty }
 
-// Estado do carrinho: um mapa de id de produto para quantidade.
-const cart = {};
+const els = {};
+document.addEventListener('DOMContentLoaded', () => {
+  // produtos
+  els.products = document.getElementById('products');
+  // desktop
+  els.cartItems = document.getElementById('cart-items');
+  els.cartTotal = document.getElementById('cart-total');
+  els.checkoutBtn = document.getElementById('checkout-btn');
+  // mobile bar
+  els.mobileBar = document.getElementById('mobile-cart-bar');
+  els.mobileOpen = document.getElementById('mobile-cart-open');
+  els.mobileCount = document.getElementById('mobile-cart-count');
+  els.mobileTotal = document.getElementById('mobile-cart-total');
+  els.mobileCheckout = document.getElementById('mobile-checkout-btn');
+  // drawer
+  els.drawer = document.getElementById('drawer');
+  els.drawerBackdrop = document.getElementById('drawer-backdrop');
+  els.drawerClose = document.getElementById('drawer-close');
+  els.cartItemsMobile = document.getElementById('cart-items-mobile');
+  els.drawerTotal = document.getElementById('drawer-total');
+  els.drawerCheckout = document.getElementById('drawer-checkout');
+  // receipt
+  els.receiptBackdrop = document.getElementById('receipt-backdrop');
+  els.receiptModal = document.getElementById('receipt-modal');
+  els.nfNumero = document.getElementById('nf-numero');
+  els.nfData = document.getElementById('nf-data');
+  els.nfItens = document.getElementById('nf-itens');
+  els.nfBase = document.getElementById('nf-base');
+  els.nfImpostos = document.getElementById('nf-impostos');
+  els.nfTotal = document.getElementById('nf-total');
+  els.nfQR = document.getElementById('nf-qr');
+  els.nfPrint = document.getElementById('nf-print');
+  els.nfClose = document.getElementById('nf-close');
 
-// Seleciona elementos do DOM que serão atualizados.
-const productGridEl   = document.getElementById('product-grid');
-const cartItemsEl     = document.getElementById('cart-items');
-const cartTotalEl     = document.getElementById('cart-total');
-const checkoutBtnEl   = document.getElementById('checkout-btn');
-const receiptModalEl  = document.getElementById('receipt-modal');
-const receiptTableBody= document.querySelector('#receipt-table tbody');
-const receiptDateEl   = document.getElementById('receipt-date');
-const receiptTotalEl  = document.getElementById('receipt-total');
-const printBtnEl      = document.getElementById('print-btn');
-const closeReceiptBtnEl = document.getElementById('close-receipt-btn');
-const qrCodeEl        = document.getElementById('qr-code');
+  renderProducts();
+  wireEvents();
+  refreshUI();
+});
 
-// Link base utilizado no QR Code da nota fiscal
-const qrLink = 'https://www.educacaofiscal.pr.gov.br/';
-qrCodeEl.src = `https://chart.googleapis.com/chart?chs=120x120&cht=qr&chl=${encodeURIComponent(qrLink)}`;
-
-// Formata números como moeda brasileira (R$).
-const formatCurrency = (value) => {
-  return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-};
-
-// Carrega os produtos na grade de produtos.
-function loadProducts() {
-  products.forEach((product) => {
-    const card = document.createElement('div');
+function renderProducts() {
+  els.products.innerHTML = '';
+  productsSeed.forEach(p => {
+    const card = document.createElement('article');
     card.className = 'product-card';
-
-    const img = document.createElement('img');
-    img.src = product.image;
-    img.alt = product.name;
-
-    const info = document.createElement('div');
-    info.className = 'product-info';
-
-    const title = document.createElement('h3');
-    title.textContent = product.name;
-
-    const price = document.createElement('p');
-    price.textContent = formatCurrency(product.price);
-
-    const btn = document.createElement('button');
-    btn.textContent = 'Adicionar ao carrinho';
-    btn.addEventListener('click', () => addToCart(product.id));
-
-    info.appendChild(title);
-    info.appendChild(price);
-    info.appendChild(btn);
-    card.appendChild(img);
-    card.appendChild(info);
-    productGridEl.appendChild(card);
+    card.innerHTML = `
+      <div class="product-img" style="background-image:url('${p.img || ''}')"></div>
+      <div class="product-info">
+        <h4>${p.name}</h4>
+        <div class="price">R$ ${p.price.toFixed(2)}</div>
+        <button data-id="${p.id}">Adicionar ao carrinho</button>
+      </div>`;
+    card.querySelector('button').addEventListener('click', () => addToCart(p));
+    els.products.appendChild(card);
   });
 }
 
-// Adiciona um item ao carrinho.
-function addToCart(productId) {
-  cart[productId] = (cart[productId] || 0) + 1;
-  updateCartUI();
+function addToCart(p) {
+  const item = cart.get(p.id) || { ...p, qty: 0 };
+  item.qty += 1;
+  cart.set(p.id, item);
+  refreshUI(true);
 }
 
-// Remove ou diminui quantidade de um item do carrinho.
-function changeCartQuantity(productId, delta) {
-  if (!cart[productId]) return;
-  cart[productId] += delta;
-  if (cart[productId] <= 0) {
-    delete cart[productId];
-  }
-  updateCartUI();
+function changeQty(id, delta) {
+  const item = cart.get(id);
+  if (!item) return;
+  item.qty += delta;
+  if (item.qty <= 0) cart.delete(id);
+  else cart.set(id, item);
+  refreshUI();
 }
 
-// Atualiza a interface do carrinho.
-function updateCartUI() {
-  // Limpa lista.
-  cartItemsEl.innerHTML = '';
+function totals() {
+  let base = 0;
+  cart.forEach(i => {
+    base += i.qty * i.price;
+  });
+  const impostos = base * TAX_RATE;
+  const total = base;
+  return { base, impostos, total };
+}
 
-  let total = 0;
-  // Para cada item do carrinho, cria elemento de lista.
-  Object.keys(cart).forEach((productId) => {
-    const product = products.find(p => p.id === Number(productId));
-    const qty = cart[productId];
-    const subtotal = product.price * qty;
-    total += subtotal;
+function money(v) {
+  return `R$ ${v.toFixed(2)}`;
+}
 
+function refreshUI(flashMobile = false) {
+  // desktop cart
+  els.cartItems.innerHTML = '';
+  cart.forEach(i => {
     const li = document.createElement('li');
-    // Nome do item
-    const nameSpan = document.createElement('span');
-    nameSpan.className = 'cart-item-name';
-    nameSpan.textContent = product.name;
-
-    // Controles de quantidade
-    const minusBtn = document.createElement('button');
-    minusBtn.textContent = '–';
-    minusBtn.className = 'qty-btn';
-    minusBtn.addEventListener('click', () => changeCartQuantity(product.id, -1));
-
-    const qtySpan = document.createElement('span');
-    qtySpan.className = 'cart-item-qty';
-    qtySpan.textContent = qty;
-
-    const plusBtn = document.createElement('button');
-    plusBtn.textContent = '+';
-    plusBtn.className = 'qty-btn';
-    plusBtn.addEventListener('click', () => changeCartQuantity(product.id, 1));
-
-    // Subtotal
-    const priceSpan = document.createElement('span');
-    priceSpan.className = 'cart-item-price';
-    priceSpan.textContent = formatCurrency(subtotal);
-
-    // Append children
-    li.appendChild(nameSpan);
-    li.appendChild(minusBtn);
-    li.appendChild(qtySpan);
-    li.appendChild(plusBtn);
-    li.appendChild(priceSpan);
-
-    cartItemsEl.appendChild(li);
+    li.innerHTML = `
+      <span class="cart-name">${i.name}</span>
+      <div class="qty">
+        <button class="qty-btn" aria-label="menos">-</button>
+        <span>${i.qty}</span>
+        <button class="qty-btn" aria-label="mais">+</button>
+      </div>
+      <strong>${money(i.qty * i.price)}</strong>
+    `;
+    const minusBtn = li.querySelectorAll('.qty-btn')[0];
+    const plusBtn  = li.querySelectorAll('.qty-btn')[1];
+    minusBtn.addEventListener('click', () => changeQty(i.id, -1));
+    plusBtn.addEventListener('click', () => changeQty(i.id, +1));
+    els.cartItems.appendChild(li);
   });
-  cartTotalEl.textContent = formatCurrency(total);
-  // Habilita botão de checkout se tiver itens.
-  checkoutBtnEl.disabled = total === 0;
+
+  // mobile cart
+  els.cartItemsMobile.innerHTML = '';
+  cart.forEach(i => {
+    const li = document.createElement('li');
+    li.innerHTML = `
+      <span class="cart-name">${i.name}</span>
+      <div class="qty">
+        <button class="qty-btn">-</button>
+        <span>${i.qty}</span>
+        <button class="qty-btn">+</button>
+      </div>
+      <strong>${money(i.qty * i.price)}</strong>
+    `;
+    const mMinusBtn = li.querySelectorAll('.qty-btn')[0];
+    const mPlusBtn  = li.querySelectorAll('.qty-btn')[1];
+    mMinusBtn.addEventListener('click', () => changeQty(i.id, -1));
+    mPlusBtn.addEventListener('click', () => changeQty(i.id, +1));
+    els.cartItemsMobile.appendChild(li);
+  });
+
+  // totals
+  const t = totals();
+  els.cartTotal.textContent = money(t.total);
+  els.drawerTotal.textContent = money(t.total);
+
+  // mobile bar
+  let count = 0;
+  cart.forEach(i => count += i.qty);
+  els.mobileCount.textContent = count;
+  els.mobileTotal.textContent = money(t.total);
+
+  const hasItems = count > 0;
+  els.checkoutBtn.disabled = !hasItems;
+  els.mobileCheckout.disabled = !hasItems;
+  els.drawerCheckout.disabled = !hasItems;
+
+  // feedback na barra ao adicionar
+  if (flashMobile) {
+    els.mobileBar.classList.add('pulse');
+    setTimeout(() => els.mobileBar.classList.remove('pulse'), 250);
+  }
 }
 
-// Taxa de imposto utilizada na simulação (20% dos produtos). Este valor é apenas ilustrativo.
-const taxRate = 0.20;
+function wireEvents() {
+  els.checkoutBtn.addEventListener('click', openReceipt);
+  els.mobileCheckout.addEventListener('click', openReceipt);
+  els.drawerCheckout.addEventListener('click', openReceipt);
 
-// Gera a nota fiscal e exibe modal.
-function generateReceipt() {
-  // Define data e hora da compra.
+  // drawer
+  els.mobileOpen.addEventListener('click', openDrawer);
+  els.drawerClose.addEventListener('click', closeDrawer);
+  els.drawerBackdrop.addEventListener('click', closeDrawer);
+
+  // nota
+  els.nfPrint.addEventListener('click', () => window.print());
+  els.nfClose.addEventListener('click', closeReceipt);
+  els.receiptBackdrop.addEventListener('click', closeReceipt);
+}
+
+function openDrawer() {
+  els.drawer.classList.add('open');
+  els.drawer.setAttribute('aria-hidden', 'false');
+  els.drawerBackdrop.hidden = false;
+}
+
+function closeDrawer() {
+  els.drawer.classList.remove('open');
+  els.drawer.setAttribute('aria-hidden', 'true');
+  els.drawerBackdrop.hidden = true;
+}
+
+function openReceipt() {
+  closeDrawer();
+  // meta
   const now = new Date();
-  const formattedDate = now.toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
-  receiptDateEl.textContent = formattedDate;
-  // Limpa tabela de itens anteriores.
-  receiptTableBody.innerHTML = '';
-  let totalPurchase = 0;
-  let totalTaxes = 0;
-  Object.keys(cart).forEach((productId) => {
-    const product = products.find(p => p.id === Number(productId));
-    const qty = cart[productId];
-    const unitPrice = product.price;
-    // Calcula imposto aproximado (assume preço final inclui imposto). Base = preço/(1+taxRate), imposto = preço - base.
-    const basePrice = unitPrice / (1 + taxRate);
-    const unitTax  = unitPrice - basePrice;
-    const itemTax  = unitTax * qty;
-    const itemTotal= unitPrice * qty;
-    totalPurchase += itemTotal;
-    totalTaxes += itemTax;
+  els.nfNumero.textContent = String(Math.floor(100000 + Math.random() * 900000));
+  els.nfData.textContent = now.toLocaleString('pt-BR');
+
+  // tabela
+  els.nfItens.innerHTML = '';
+  let base = 0, impostos = 0;
+  cart.forEach(i => {
+    const subtotal = i.qty * i.price;
+    const tax = subtotal * TAX_RATE;
+    base += subtotal;
+    impostos += tax;
     const tr = document.createElement('tr');
-    const tdName  = document.createElement('td');
-    tdName.textContent = product.name;
-    const tdQty   = document.createElement('td');
-    tdQty.textContent = qty;
-    const tdUnit  = document.createElement('td');
-    tdUnit.textContent = formatCurrency(unitPrice);
-    const tdTax   = document.createElement('td');
-    tdTax.textContent = formatCurrency(itemTax);
-    const tdTotal = document.createElement('td');
-    tdTotal.textContent = formatCurrency(itemTotal);
-    tr.appendChild(tdName);
-    tr.appendChild(tdQty);
-    tr.appendChild(tdUnit);
-    tr.appendChild(tdTax);
-    tr.appendChild(tdTotal);
-    receiptTableBody.appendChild(tr);
+    tr.innerHTML = `
+      <td>${i.name}</td>
+      <td>${i.qty}</td>
+      <td>${money(i.price)}</td>
+      <td>${money(tax)}</td>
+      <td>${money(subtotal)}</td>
+    `;
+    els.nfItens.appendChild(tr);
   });
-// Atualiza totais na nota fiscal.
-  const receiptTaxesEl = document.getElementById('receipt-taxes');
-  receiptTaxesEl.textContent = formatCurrency(totalTaxes);
-  receiptTotalEl.textContent = formatCurrency(totalPurchase);
-  receiptModalEl.classList.remove('hidden');
-}
 
-// Imprime a nota fiscal em uma nova janela com diagramação semelhante à de uma nota real.
-function printReceipt() {
-  const dateStr = receiptDateEl.textContent;
-  // Clona os dados do carrinho para não depender de estado externo durante a impressão
-  const cartSnapshot = JSON.parse(JSON.stringify(cart));
-  // Cria janela
-  const printWindow = window.open('', '', 'width=800,height=800');
-  const styles = `
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    h1, h2, h3 { text-align: center; margin: 0; }
-    .header-info { margin-bottom: 1rem; }
-    .header-info p { margin: 0.1rem 0; font-size: 0.9rem; }
-    table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.85rem; }
-    th, td { border: 1px solid #ccc; padding: 6px; text-align: left; }
-    th { background-color: #f0f8ff; }
-    tfoot td { font-weight: bold; }
-    .disclaimer { margin-top: 1rem; font-size: 0.8rem; font-style: italic; color: #555; text-align: center; }
-    .qr-code { display:block; margin:1rem auto; }
-  `;
-  let html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Nota Fiscal</title><style>${styles}</style></head><body>`;
-  // Cabeçalho da nota
-  html += '<h1>Vendinha do Fisco</h1>';
-  html += '<div class="header-info">';
-  html += '<p>CNPJ: 00.000.000/0001-00</p>';
-  html += '<p>Endereço: Rua Exemplo, 123 - São Paulo/SP</p>';
-  html += `<p>Data/hora da emissão: ${dateStr}</p>`;
-  html += '<p>Cliente: Consumidor Final</p>';
-  html += '</div>';
-  // Tabela de produtos
-  html += '<table><thead><tr><th>Produto</th><th>Qtd</th><th>Vlr Unit.</th><th>Impostos</th><th>Total</th></tr></thead><tbody>';
-  let totalPurchase = 0;
-  let totalTaxes = 0;
-  Object.keys(cartSnapshot).forEach((productId) => {
-    const product = products.find(p => p.id === Number(productId));
-    const qty = cartSnapshot[productId];
-    const unitPrice = product.price;
-    const basePrice = unitPrice / (1 + taxRate);
-    const unitTax = unitPrice - basePrice;
-    const itemTax = unitTax * qty;
-    const itemTotal = unitPrice * qty;
-    totalPurchase += itemTotal;
-    totalTaxes += itemTax;
-    html += `<tr><td>${product.name}</td><td>${qty}</td><td>${formatCurrency(unitPrice)}</td><td>${formatCurrency(itemTax)}</td><td>${formatCurrency(itemTotal)}</td></tr>`;
-  });
-  html += '</tbody>';
-  html += `<tfoot><tr><td colspan="4">Total de impostos</td><td>${formatCurrency(totalTaxes)}</td></tr>`;
-  html += `<tr><td colspan="4">Total da compra</td><td>${formatCurrency(totalPurchase)}</td></tr></tfoot></table>`;
-d68al9-codex/improve-responsive-design-for-mobile
-  const encodedLink = encodeURIComponent(qrLink);
-  html += `<img class="qr-code" src="https://chart.googleapis.com/chart?chs=120x120&cht=qr&chl=${encodedLink}" alt="QR Code da Educação Fiscal do Paraná">`;
-  html += '<p class="disclaimer">Este documento não tem valor fiscal e foi gerado com um simulador educacional.</p>';
-  html += '</body></html>';
+  els.nfBase.textContent = money(base);
+  els.nfImpostos.textContent = money(impostos);
+  els.nfTotal.textContent = money(base);
 
-  printWindow.document.write(html);
-  printWindow.document.close();
-  printWindow.onload = () => {
-    printWindow.focus();
-    printWindow.print();
-    printWindow.close();
+  // QR fixo
+  els.nfQR.src = QR_SRC;
+  els.nfQR.onclick = () => {
+    window.open('https://www.educacaofiscal.pr.gov.br/', '_blank');
   };
+
+  // mostra modal
+  els.receiptBackdrop.hidden = false;
+  els.receiptModal.hidden = false;
 }
 
-// Esconde o modal da nota fiscal e limpa o carrinho.
 function closeReceipt() {
-  receiptModalEl.classList.add('hidden');
-  // Após imprimir/fechar, esvaziar carrinho.
-  Object.keys(cart).forEach((key) => delete cart[key]);
-  updateCartUI();
+  els.receiptBackdrop.hidden = true;
+  els.receiptModal.hidden = true;
 }
-
-// Configura event listeners
-checkoutBtnEl.addEventListener('click', generateReceipt);
-printBtnEl.addEventListener('click', printReceipt);
-closeReceiptBtnEl.addEventListener('click', closeReceipt);
-
-// Carrega grade de produtos ao iniciar
-loadProducts();
-s5tjf3-codex/improve-responsive-design-for-mobile
-// Atualiza carrinho inicialmente (vazio)
-updateCartUI();
-d68al9-codex/improve-responsive-design-for-mobile

@@ -44,9 +44,9 @@ body {
   flex-direction: column;
 }
 .product-img {
-  aspect-ratio: 1.5/1;
-  background: #eee;
-  background-size: cover;
+  height: 160px;           /* altura fixa para não cortar a barra inferior da arte */
+  background-size: contain;/* encaixa a arte inteira */
+  background-repeat: no-repeat;
   background-position: center;
 }
 .product-info {

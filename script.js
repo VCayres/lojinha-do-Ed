@@ -25,7 +25,7 @@ const productsSeed = [
   { id: 19, name: 'Feijão 1Kg',     price: 8.00, img: 'assets/19.png' },
   { id: 20, name: 'Litro de leite',     price: 6.00, img: 'assets/20.png' },
   { id: 21, name: 'Pacote de balas',     price: 7.00, img: 'assets/21.png' },
-  { id: 22, name: 'Pão 750 gramas',     price: 10.00, img: 'assets/7.png' },
+  { id: 22, name: 'Pão 750 gramas',     price: 10.00, img: 'assets/22.png' },
   { id: 23, name: 'Sorvete',     price: 15.00, img: 'assets/23.png' },
   { id: 24, name: 'Caixa de suco 1l',     price: 6.00, img: 'assets/24.png' },
   { id: 25, name: 'Tomate',     price: 7.00, img: 'assets/25.png' },

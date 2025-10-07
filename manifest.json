@@ -1,6 +1,6 @@
 {
-  "name": "Vendinha do Fisco",
-  "short_name": "Vendinha",
+  "name": "Lojinha do Ed",
+  "short_name": "Lojinha",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

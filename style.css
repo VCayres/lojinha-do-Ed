@@ -13,52 +13,27 @@ body {
   color: var(--ink);
 }
 [hidden] { display: none !important; }
-/* ====== HEADER ====== */
 .header {
-  background: linear-gradient(135deg, #0077b6, #00b4d8);
+  background: linear-gradient(135deg, var(--primary), #90e0ef);
   color: #fff;
+  padding: 1.2rem;
   text-align: center;
-  padding: 1.5rem 1rem;
-  border-bottom: 4px solid #90e0ef;
 }
+.header h1 { margin: .2rem 0 0; }
+.header p { margin: .3rem 0 0; opacity: .9; }
 
-/* Container do Ed + título */
-.header-content {
-  display: flex;
-  align-items: center;
-  justify-content: center;  /* centraliza o conjunto no desktop */
-  gap: 16px;                /* espaçamento entre Ed e o texto */
-  flex-wrap: wrap;          /* permite quebrar em duas linhas se precisar */
-}
-
-/* Imagem do Ed */
 .header-logo {
-  height: 90px;
-  flex-shrink: 0;           /* impede o Ed de deformar */
+  height: 200px;          /* tamanho do Ed */
+  display: block;
+  margin: 0 auto 10px;    /* centraliza e dá espaço abaixo */
 }
 
-/* Texto */
-.header-text h1 {
-  margin: 0;
-  font-size: 2rem;
-}
-.header-text p {
-  margin: .3rem 0 0;
-  font-size: 1rem;
-}
-
-/* ====== RESPONSIVO (para celular) ====== */
 @media (max-width: 600px) {
-  .header-content {
-    flex-direction: column;   /* Ed em cima do texto */
-  }
   .header-logo {
-    height: 70px;
-  }
-  .header-text h1 {
-    font-size: 1.6rem;
+    height: 100px;         /* menor no celular */
   }
 }
+
 
 .app {
   display: grid;

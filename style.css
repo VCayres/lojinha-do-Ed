@@ -25,7 +25,7 @@ body {
 .header-logo {
   height: 200px;          /* tamanho do Ed */
   display: block;
-  margin: 0 auto 10px;    /* centraliza e dá espaço abaixo */
+  margin: -500 auto 0px;    /* centraliza e dá espaço abaixo */
 }
 
 @media (max-width: 600px) {

@@ -23,14 +23,14 @@ body {
 .header p { margin: .3rem 0 0; opacity: .9; }
 
 .header-logo {
-  height: 100px;          /* tamanho do Ed */
+  height: 200px;          /* tamanho do Ed */
   display: block;
   margin: 0 auto 10px;    /* centraliza e dá espaço abaixo */
 }
 
 @media (max-width: 600px) {
   .header-logo {
-    height: 70px;         /* menor no celular */
+    height: 100px;         /* menor no celular */
   }
 }
 

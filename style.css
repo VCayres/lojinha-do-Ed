@@ -23,7 +23,7 @@ body {
 .header p { margin: .3rem 0 0; opacity: .9; }
 
 .header-logo {
-  height: 200px;          /* tamanho do Ed */
+  height: 400px;          /* tamanho do Ed */
   margin: 0 auto 0px;    /* posiciona e dá espaço abaixo */
 }
 

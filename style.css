@@ -14,14 +14,24 @@ body {
 }
 [hidden] { display: none !important; }
 .header {
-width: 100%;
-  height: clamp(160px, 22vw, 320px);
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  background: center / cover no-repeat url('assets/27.lojinha.png');
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  background: linear-gradient(135deg, var(--primary), #90e0ef);
+  color: #fff;
+  padding: 1.2rem;
+  text-align: center;
+}
+.header h1 { margin: .2rem 0 0; }
+.header p { margin: .3rem 0 0; opacity: .9; }
+
+.header-logo {
+  height: 200px;          /* tamanho do Ed */
+  margin: 0 auto 0px;    /* posiciona e dá espaço abaixo */
+}
+
+@media (max-width: 600px) {
+  .header-logo {
+    height: 100px;         /* menor no celular */
   }
+}
 
 
 .app {

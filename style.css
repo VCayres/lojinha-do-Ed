@@ -14,22 +14,19 @@ body {
 }
 [hidden] { display: none !important; }
 .header {
-  background: linear-gradient(135deg, var(--primary), #90e0ef);
-  color: #fff;
-  padding: 1.2rem;
-  text-align: center;
-}
-.header h1 { margin: .2rem 0 0; }
-.header p { margin: .3rem 0 0; opacity: .9; }
-
-.header-logo {
-  height: 200px;          /* tamanho do Ed */
-  margin: 0 auto 0px;    /* posiciona e dá espaço abaixo */
+  width: 100%;
+  height: clamp(220px, 34vw, 520px);
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
 }
 
-@media (max-width: 600px) {
-  .header-logo {
-    height: 100px;         /* menor no celular */
+.header-banner {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
   }
 }
 

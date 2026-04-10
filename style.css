@@ -14,7 +14,7 @@ body {
 }
 [hidden] { display: none !important; }
 .header {
-  background: linear-gradient(135deg, var(--primary), #90e0ef);
+   background: linear-gradient(135deg, var(--primary), #90e0ef);
   color: #fff;
   padding: 1.2rem;
   text-align: center;

@@ -194,10 +194,62 @@ function wireEvents() {
   els.drawerBackdrop.addEventListener('click', closeDrawer);
 
   // nota
-  els.nfPrint.addEventListener('click', () => window.print());
+    els.nfPrint.addEventListener('click', printReceiptOnly);
   els.nfClose.addEventListener('click', closeReceipt);
   els.receiptBackdrop.addEventListener('click', closeReceipt);
 }
+
+function printReceiptOnly() {
+  const receipt = document.querySelector('.receipt-paper');
+  if (!receipt) return;
+
+  const printWindow = window.open('', '_blank', 'width=900,height=700');
+  if (!printWindow) {
+    window.print();
+    return;
+  }
+
+  const receiptClone = receipt.cloneNode(true);
+  const actions = receiptClone.querySelector('.nf-acoes');
+  if (actions) actions.remove();
+
+  const baseHref = window.location.href;
+
+  printWindow.document.open();
+  printWindow.document.write(`
+    <!doctype html>
+    <html lang="pt-BR">
+    <head>
+      <meta charset="UTF-8">
+      <base href="${baseHref}">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>Nota Fiscal - Lojinha do Ed</title>
+      <link rel="stylesheet" href="style.css">
+      <style>
+        body { margin: 0; background: #fff; }
+        .receipt-paper {
+          width: 100%;
+          border: 0;
+          box-shadow: none;
+          border-radius: 0;
+          padding: 0;
+        }
+        @page { size: auto; margin: 12mm; }
+      </style>
+    </head>
+    <body></body>
+    </html>
+  `);
+  printWindow.document.body.appendChild(receiptClone);
+  printWindow.document.close();
+
+  printWindow.onload = () => {
+    printWindow.focus();
+    printWindow.print();
+    printWindow.close();
+  };
+}
+
 
 function openDrawer() {
   els.drawer.classList.add('open');

@@ -187,7 +187,7 @@ body {
   height: 90vh;
   overflow: auto;
 }
-}
+
 .receipt-paper {
   width: min(820px, 95vw);
   background: #fff;
@@ -195,6 +195,7 @@ body {
   box-shadow: 0 12px 40px rgba(0,0,0,.25);
   padding: 18px;
   border-radius: 8px;
+  opacity: 1;
 }
 .nf-header {
   display: flex;

@@ -184,7 +184,7 @@ body {
   justify-content: center;
   align-items: flex-start;
   z-index: 3999;
-  padding: 5vh 24px;
+  height: 90vh;
   overflow: auto;
 }
 }

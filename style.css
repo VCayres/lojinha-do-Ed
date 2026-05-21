@@ -178,11 +178,15 @@ body {
   z-index: 59;
 }
 .receipt-modal {
+  position: fixed;
+  inset: 0;
   display: flex;
-  align-items: center;
-  justify-content: center;z-index: 3999;
-  height: 90vh;
+  justify-content: center;
+  align-items: flex-start;
+  z-index: 3999;
+  padding: 5vh 24px;
   overflow: auto;
+}
 }
 .receipt-paper {
   width: min(820px, 95vw);
